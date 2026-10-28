@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,37 +125,37 @@ public final class ColorUtil {
     private static String legacyToTag(char code) {
         switch (code) {
             case '0':
-                return "<reset><black>";
+                return "<black>";
             case '1':
-                return "<reset><dark_blue>";
+                return "<dark_blue>";
             case '2':
-                return "<reset><dark_green>";
+                return "<dark_green>";
             case '3':
-                return "<reset><dark_aqua>";
+                return "<dark_aqua>";
             case '4':
-                return "<reset><dark_red>";
+                return "<dark_red>";
             case '5':
-                return "<reset><dark_purple>";
+                return "<dark_purple>";
             case '6':
-                return "<reset><gold>";
+                return "<gold>";
             case '7':
-                return "<reset><gray>";
+                return "<gray>";
             case '8':
-                return "<reset><dark_gray>";
+                return "<dark_gray>";
             case '9':
-                return "<reset><blue>";
+                return "<blue>";
             case 'a':
-                return "<reset><green>";
+                return "<green>";
             case 'b':
-                return "<reset><aqua>";
+                return "<aqua>";
             case 'c':
-                return "<reset><red>";
+                return "<red>";
             case 'd':
-                return "<reset><light_purple>";
+                return "<light_purple>";
             case 'e':
-                return "<reset><yellow>";
+                return "<yellow>";
             case 'f':
-                return "<reset><white>";
+                return "<white>";
             case 'k':
                 return "<obfuscated>";
             case 'l':

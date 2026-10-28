@@ -1,6 +1,7 @@
 package ru.mr_hares.vexillum.command;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -168,6 +169,44 @@ public class AllianceCommand extends CommandTemplate {
                 target.sendMessage(ColorUtil.parse(getML().getString("notify-invite")));
             } else {
                 player.sendMessage(ColorUtil.colorize(getML().getString("already-invite")));
+            }
+        } else if (args[0].equalsIgnoreCase("accept")) {
+            if (!invites.containsKey(player.getUniqueId())) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-invite")));
+                return;
+            }
+
+            if (himself != null) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("in-alliance")));
+                return;
+            }
+
+            Player target = Bukkit.getPlayer(invites.get(player.getUniqueId()));
+            assert target != null;
+            int CityID = getDB().getPeopleDetails(target.getUniqueId()).getCityID();
+            getDB().addPeople(player.getUniqueId(), CityID);
+            invites.remove(player.getUniqueId());
+
+            player.sendMessage(ColorUtil.colorize(getML().getString("accept.receiver")));
+            if (target.isOnline()) {
+                target.sendMessage(ColorUtil.colorize(getML().getString("accept.sender")
+                        .replace("{player}", player.getName())
+                ));
+            }
+        } else if (args[0].equalsIgnoreCase("decline")) {
+            if (!invites.containsKey(player.getUniqueId())) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-invite")));
+                return;
+            }
+
+            Player target = Bukkit.getPlayer(invites.get(player.getUniqueId()));
+            invites.remove(player.getUniqueId());
+
+            player.sendMessage(ColorUtil.colorize(getML().getString("decline.receiver")));
+            if (target != null && target.isOnline()) {
+                target.sendMessage(ColorUtil.colorize(getML().getString("decline.sender")
+                        .replace("{player}", player.getName())
+                ));
             }
         } else {
             player.sendMessage(String.join("\n", ColorUtil.colorize(getML().getStringList("help.command-list"))));

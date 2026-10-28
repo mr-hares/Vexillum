@@ -15,11 +15,14 @@ help:
     - "  &7/aln invite [ник] &8- &fпригласить в поселение"
     - "  &7/aln accept &8- &fпринять приглашение"
     - "  &7/aln decline &8- &fотклонить приглашение"
-    - "  &7/aln kick &8- &fвыгнать из поселения"
+    - "  &7/aln kick [ник] [причина(необязательно)] &8- &fвыгнать из поселения"
+    - "  &7/aln promote [ник] &8- &fповысить роль в поселение"
+    - "  &7/aln demote [ник] &8- &fпонизить роль в поселение"
 
   use-create: "{prefix}Используйте: <#b38dd9>/aln create [название]</#b38dd9>"
   use-rename: "{prefix}Используйте: <#b38dd9>/aln rename [название]</#b38dd9>"
   use-invite: "{prefix}Используйте: <#b38dd9>/aln invite [ник]</#b38dd9>"
+  use-kick: "{prefix}Используйте: <#b38dd9>/aln kick [ник] [причина(необязательно)]</#b38dd9>"
 
 only-player: "{prefix}Данную команду <#b38dd9>может использовать</#b38dd9> только игрок"
 not-found-player: "{prefix}Указанный вами игрок <#b38dd9>не найден</#b38dd9>"
@@ -35,13 +38,19 @@ already-name: "{prefix}Поселение с таким названием <#b38
 alliance-create: '{prefix}Вы <#b38dd9>основали</#b38dd9> поселение с названием "{name}"'
 create-broadcast: '{prefix}Игрок <#b38dd9>{player}</#b38dd9> основал новое поселение "{name}"'
 
-not-owner: "{prefix}Данную команду <#b38dd9>может использовать</#b38dd9> только глава поселения"
+not-owner: "{prefix}Данную команду <#b38dd9>может использовать</#b38dd9> только староста поселения"
 rename: "{prefix}Вы <#b38dd9>изменили</#b38dd9> название посления на {name}"
 
 already-invite: "{prefix}У игрока <#b38dd9>уже есть</#b38dd9> активное приглашение"
 time-up-invite: "{prefix}Игрок <#b38dd9>{player}</#b38dd9> не принял решение <#b38dd9>по вашему</#b38dd9> приглашению"
 time-up: "{prefix}Время на принятие решения <#b38dd9>вышло</#b38dd9>"
 send-invite: "{prefix}Приглашение в поселение <#b38dd9>успешно отправлено</#b38dd9>"
-notify-invite: "{prefix}Игрок <#b38dd9>{player}</#b38dd9> отправил <#b38dd9>вам</#b38dd9> приглашение в 
-поселение\n<click:run_command:aln accept>&a[ Принять 
-]</click>   <click:run_command:aln decline>&c[ Отклонить ]</click>"
+notify-invite: "{prefix}Игрок <#b38dd9>{player}</#b38dd9> отправил <#b38dd9>вам</#b38dd9> приглашение в поселение\n<click:run_command:aln accept>&a[ Принять ]</click>   <click:run_command:aln decline>&c[ Отклонить ]</click>"
+
+not-invite: "{prefix}У вас <#b38dd9>нет активного</#b38dd9> приглашения"
+accept:
+  sender: "{prefix}Игрок <#b38dd9>{player}</#b38dd9> принял <#b38dd9>ваше</#b38dd9> приглашение на вступление"
+  receiver: "{prefix}Вы <#b38dd9>приняли</#b38dd9> приглашение на вступление"
+decline:
+  sender: "{prefix}Игрок <#b38dd9>{player}</#b38dd9> отклонил <#b38dd9>ваше</#b38dd9> приглашение на вступление"
+  receiver: "{prefix}Вы <#b38dd9>отклонили</#b38dd9> приглашение на вступление"
