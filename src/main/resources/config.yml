@@ -1,0 +1,29 @@
+# Plugin language. Available: ru_ru, en_us
+lang: ru_ru
+
+# Alliance settings
+alliance:
+  max-count: 7 # The maximum number of alliances
+  max-members: 20 # The maximum number of players in one alliance
+
+  min-name-length: 5 # Minimum number of characters in the title
+  max-name-length: 16 # Maximum number of characters in the title
+
+  # List of blocked words in the alliance name
+  block-word-in-name: [admin, owner, server, moder, helper]
+
+  # The price for creating an alliance.
+  # Example: golden_ingot: 10
+  price-creating:
+    golden_ingot: 10
+    diamond: 5
+
+  # Notification to everyone about the founding of a new post.
+  create-broadcast: true
+
+  # The roles of the settlement participants
+  roles:
+    owner: "Староста поселения"
+    deputy: "Помощник старосты"
+    treasurer: "Казначей"
+    citizen: "Житель"

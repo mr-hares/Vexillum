@@ -1,0 +1,34 @@
+name: Vexillum
+prefix: Vexillum
+version: '${version}'
+
+main: ru.mr_hares.vexillum.Vexillum
+api-version: '1.21.11'
+load: POSTWORLD
+
+authors: [ mr_hares ]
+
+commands:
+  vexillum:
+    aliases: [vex]
+    permission: vexillum.admin.reload
+  alliance:
+    aliases: [aln]
+    permission:
+
+permissions:
+  vexillum.*:
+    description: "Все разрешения плагина"
+    default: op
+    children:
+      - vexillum.admin.*
+
+  vexillumv.admin.*:
+    description: "Все админские разрешения плагина"
+    default: op
+    children:
+      - vexillum.admin.reload
+
+  vexillum.admin.reload:
+    description: "Разрешение на перезагрузку конфигурации"
+    default: op
