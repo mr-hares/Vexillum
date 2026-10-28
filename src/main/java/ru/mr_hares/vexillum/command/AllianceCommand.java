@@ -208,6 +208,8 @@ public class AllianceCommand extends CommandTemplate {
                         .replace("{player}", player.getName())
                 ));
             }
+        } else if (args[0].equalsIgnoreCase("kick")) {
+            
         } else {
             player.sendMessage(String.join("\n", ColorUtil.colorize(getML().getStringList("help.command-list"))));
         }
