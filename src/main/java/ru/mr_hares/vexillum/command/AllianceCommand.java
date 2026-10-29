@@ -3,6 +3,7 @@ package ru.mr_hares.vexillum.command;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -158,6 +159,11 @@ public class AllianceCommand extends CommandTemplate {
                 return;
             }
 
+            if (Objects.equals(target.getName(), player.getName())) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("with-myself")));
+                return;
+            }
+
             PeopleDetails tarDetails = getDB().getPeopleDetails(target.getUniqueId());
             if (tarDetails != null) {
                 player.sendMessage(ColorUtil.colorize(getML().getString("player-in-alliance")));
@@ -209,10 +215,175 @@ public class AllianceCommand extends CommandTemplate {
                 ));
             }
         } else if (args[0].equalsIgnoreCase("kick")) {
-            
+            if (himself == null) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-in-alliance")));
+                return;
+            }
+
+            if (himself.getRank() < 3) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-permission")));
+                return;
+            }
+
+            if (args.length < 2) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("help.use-kick")));
+                return;
+            }
+
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+            if (!target.hasPlayedBefore()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-found-player")));
+                return;
+            }
+
+            if (Objects.equals(target.getName(), player.getName())) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("with-myself")));
+                return;
+            }
+
+            PeopleDetails tarDetails = getDB().getPeopleDetails(target.getUniqueId());
+            if (tarDetails == null || tarDetails.getCityID() != himself.getCityID()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("player-not-in-alliance")));
+                return;
+            }
+
+            if (himself.getRank() <= tarDetails.getRank()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("cannot-interact")));
+                return;
+            }
+
+            getDB().removePeople(target.getUniqueId(), himself.getCityID());
+            player.sendMessage(ColorUtil.colorize(getML().getString("kick.initiator")
+                    .replace("{player}", target.getName())
+            ));
+
+            if (target.isOnline()) {
+                target.getPlayer().sendMessage(ColorUtil.colorize(getML().getString("kick.target")
+                        .replace("{player}", player.getName())
+                        .replace("{rank}", himself.getRankName())
+                ));
+            }
+        } else if (args[0].equalsIgnoreCase("promote")) {
+            if (himself == null) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-in-alliance")));
+                return;
+            }
+
+            if (himself.getRank() < 3) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-permission")));
+                return;
+            }
+
+            if (args.length < 2) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("help.use-promote")));
+                return;
+            }
+
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+            if (!target.hasPlayedBefore()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-found-player")));
+                return;
+            }
+
+            if (Objects.equals(target.getName(), player.getName())) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("with-myself")));
+                return;
+            }
+
+            PeopleDetails tarDetails = getDB().getPeopleDetails(target.getUniqueId());
+            if (tarDetails == null || tarDetails.getCityID() != himself.getCityID()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("player-not-in-alliance")));
+                return;
+            }
+
+            if (tarDetails.getRank() + 1 >= himself.getRank()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("maximum-role")));
+                return;
+            }
+
+            getDB().editRank(target.getUniqueId(), himself.getCityID());
+            player.sendMessage(ColorUtil.colorize(getML().getString("promote.initiator")
+                    .replace("{player}", target.getName())
+                    .replace("{rank}", getRankName(tarDetails.getRank() + 1))
+            ));
+
+            if (target.isOnline()) {
+                target.getPlayer().sendMessage(ColorUtil.colorize(getML().getString("promote.target")
+                        .replace("{player}", player.getName())
+                        .replace("{player_rank}", himself.getRankName())
+                        .replace("{rank}", getRankName(tarDetails.getRank() + 1))
+                ));
+            }
+        } else if (args[0].equalsIgnoreCase("demote")) {
+            if (himself == null) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-in-alliance")));
+                return;
+            }
+
+            if (himself.getRank() < 3) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-permission")));
+                return;
+            }
+
+            if (args.length < 2) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("help.use-promote")));
+                return;
+            }
+
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+            if (!target.hasPlayedBefore()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-found-player")));
+                return;
+            }
+
+            if (Objects.equals(target.getName(), player.getName())) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("with-myself")));
+                return;
+            }
+
+            PeopleDetails tarDetails = getDB().getPeopleDetails(target.getUniqueId());
+            if (tarDetails == null || tarDetails.getCityID() != himself.getCityID()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("player-not-in-alliance")));
+                return;
+            }
+
+            if (tarDetails.getRank() - 1 <= 0) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("minimal-role")));
+                return;
+            }
+
+            if (himself.getRank() <= tarDetails.getRank()) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("cannot-interact")));
+                return;
+            }
+
+            getDB().editRank(target.getUniqueId(), himself.getCityID());
+            player.sendMessage(ColorUtil.colorize(getML().getString("demote.initiator")
+                    .replace("{player}", target.getName())
+                    .replace("{rank}", getRankName(tarDetails.getRank() + 1))
+            ));
+
+            if (target.isOnline()) {
+                target.getPlayer().sendMessage(ColorUtil.colorize(getML().getString("demote.target")
+                        .replace("{player}", player.getName())
+                        .replace("{player_rank}", himself.getRankName())
+                        .replace("{rank}", getRankName(tarDetails.getRank() + 1))
+                ));
+            }
         } else {
             player.sendMessage(String.join("\n", ColorUtil.colorize(getML().getStringList("help.command-list"))));
         }
+    }
+
+    private String getRankName(int rank) {
+        String rank_key = switch (rank) {
+            case 4 -> "owner";
+            case 3 -> "deputy";
+            case 2 -> "treasurer";
+            default -> "citizen";
+        };
+
+        return getInstance().getConfig().getString("alliance.roles." + rank_key, "Житель");
     }
 
     @Override
@@ -224,14 +395,22 @@ public class AllianceCommand extends CommandTemplate {
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("invite")) {
                 return null;
+            } else if (args[0].equalsIgnoreCase("kick") && sender instanceof Player player) {
+                PeopleDetails dt = getDB().getPeopleDetails(player.getUniqueId());
+                List<PeopleDetails> people = getDB().getPeopleList(dt.getCityID());
+
+                return people.stream().map(peopleDetails -> {
+                    OfflinePlayer op = Bukkit.getOfflinePlayer(peopleDetails.getUUID());
+                    return op.getName();
+                }).toList();
             }
         }
 
         return List.of();
     }
 
-    private Map<String, Integer> getPrice() {
-        Map<String, Integer> price = new HashMap<>();
+    private Map<Material, Integer> getPrice() {
+        Map<Material, Integer> price = new HashMap<>();
 
         ConfigurationSection price_sc = getML().getYaml().getConfigurationSection("alliance.price-creating");
         if (price_sc == null) return price;
@@ -241,7 +420,7 @@ public class AllianceCommand extends CommandTemplate {
                 Material material = Material.valueOf(name);
                 int amount = price_sc.getInt(name);
                 if (amount > 0)
-                    price.put(name, amount);
+                    price.put(material, amount);
             } catch (IllegalArgumentException e) {
                 continue;
             }
@@ -251,13 +430,12 @@ public class AllianceCommand extends CommandTemplate {
     }
 
     private boolean hasPrice(Player player) {
-        Map<String, Integer> price = getPrice();
+        Map<Material, Integer> price = getPrice();
         Inventory inventory = player.getInventory();
         List<Boolean> booleans = new ArrayList<>();
 
-        for (String key: price.keySet()) {
-            int amount = price.get(key);
-            booleans.add(inventory.contains(Material.valueOf(key), amount));
+        for (Map.Entry<Material, Integer> entry: price.entrySet()) {
+            booleans.add(inventory.contains(entry.getKey(), entry.getValue()));
         }
 
         if (booleans.isEmpty()) return false;
@@ -265,12 +443,11 @@ public class AllianceCommand extends CommandTemplate {
     }
 
     private void removeItems(Player player) {
-        Map<String, Integer> price = getPrice();
+        Map<Material, Integer> price = getPrice();
         Inventory inventory = player.getInventory();
 
-        for (String key: price.keySet()) {
-            int amount = price.get(key);
-            ItemStack item = new ItemStack(Material.valueOf(key), amount);
+        for (Map.Entry<Material, Integer> entry: price.entrySet()) {
+            ItemStack item = new ItemStack(entry.getKey(), entry.getValue());
             inventory.remove(item);
         }
     }
