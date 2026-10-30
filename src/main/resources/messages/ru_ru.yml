@@ -6,10 +6,10 @@ help:
   command-list:
     - "{prefix}Список доступных команд:"
     - "  &7/aln create [название] &8- &fсоздание нового поселения"
-    - "  &7/aln menu &8- &fменю управление поселением"
     - "&f"
     - "  &7/aln info &8- &fинформация о поселение"
     - "  &7/aln list &8- &fсписок поселений"
+    - "  &7/aln members &8- &fсписок участников поселения"
     - "&f"
     - "  &7/aln rename [название] &8- &fсменить название поселения"
     - "  &7/aln invite [ник] &8- &fпригласить в поселение"
@@ -25,7 +25,7 @@ help:
   use-kick: "{prefix}Используйте: <#b38dd9>/aln kick [ник]</#b38dd9>"
   use-promote: "{prefix}Используйте: <#b38dd9>/aln promote [ник]</#b38dd9>"
   use-demote: "{prefix}Используйте: <#b38dd9>/aln demote [ник]</#b38dd9>"
-
+  use-info: "{prefix}Используйте: <#b38dd9>/aln info [поселение]</#b38dd9>"
 
 only-player: "{prefix}Данную команду <#b38dd9>может использовать</#b38dd9> только игрок"
 not-found-player: "{prefix}Указанный вами игрок <#b38dd9>не найден</#b38dd9>"
@@ -74,3 +74,10 @@ demote:
   initiator: "{prefix}Вы понизили <#b38dd9>{player}<#b38dd9> до <#b38dd9>{rank}</#b38dd9>"
   target: "{prefix}{player_rank} <#b38dd9>{player}</#b38dd9> понизил <#b38dd9>вас</#b38dd9> до 
   <#b38dd9>{rank}</#b38dd9>"
+
+not-found-alliance: "{prefix}Указанное вами поселение <#b38dd9>не найдено</#b38dd9>"
+info:
+  - "{prefix}Информация о поселение {name}"
+  - "Староста поселения: <#b38dd9>{owner}</#b38dd9>"
+  - "Жилетей: <#b38dd9>{members}</#b38dd9>"
+  - "Уровень жизни: <#b38dd9>{level}</#b38dd9> ({exp}/{next_exp})"

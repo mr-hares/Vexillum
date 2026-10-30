@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import ru.mr_hares.vexillum.objects.CityDetails;
 import ru.mr_hares.vexillum.objects.PeopleDetails;
 import ru.mr_hares.vexillum.utils.ColorUtil;
 import ru.mr_hares.vexillum.utils.CommandTemplate;
@@ -370,6 +371,35 @@ public class AllianceCommand extends CommandTemplate {
                         .replace("{rank}", getRankName(tarDetails.getRank() + 1))
                 ));
             }
+        } else if (args[0].equalsIgnoreCase("info")) {
+            int CityID = 0;
+
+            if (himself == null) {
+                if (args.length < 2) {
+                    player.sendMessage(ColorUtil.colorize(getML().getString("help.use-info")));
+                    return;
+                }
+
+                CityID = getCityID(String.join(" ", new ArrayList<>(List.of(args)).subList(1, args.length)));
+            } else {
+                CityID = himself.getCityID();
+            }
+
+            CityDetails cd = getDB().getCityDetails(CityID);
+            if (cd == null) {
+                player.sendMessage(ColorUtil.colorize(getML().getString("not-found-alliance")));
+                return;
+            }
+
+            OfflinePlayer op = Bukkit.getOfflinePlayer(cd.getOwnerUUID());
+            player.sendMessage(String.join("\n", ColorUtil.colorize(getML().getStringList("info").stream().map(
+                    line -> line.replace("{owner}", op.getName())
+                            .replace("{members}", String.valueOf(getDB().getPeopleList(cd.getCityID()).size()))
+                            .replace("{level}", String.valueOf(cd.getLevel()))
+                            .replace("{exp}", String.valueOf(cd.getExp()))
+                            .replace("{name}", cd.getName())
+                            .replace("{next_exp}", String.valueOf(Math.pow(2, cd.getLevel())))
+            ).toList())));
         } else {
             player.sendMessage(String.join("\n", ColorUtil.colorize(getML().getStringList("help.command-list"))));
         }
@@ -384,6 +414,14 @@ public class AllianceCommand extends CommandTemplate {
         };
 
         return getInstance().getConfig().getString("alliance.roles." + rank_key, "Житель");
+    }
+
+    private int getCityID(String name) {
+        for (CityDetails cd: getDB().getCityList()) {
+            if (ColorUtil.strip(cd.getName()).equals(ColorUtil.strip(name))) return cd.getCityID();
+        }
+
+        return -1;
     }
 
     @Override
@@ -403,6 +441,8 @@ public class AllianceCommand extends CommandTemplate {
                     OfflinePlayer op = Bukkit.getOfflinePlayer(peopleDetails.getUUID());
                     return op.getName();
                 }).toList();
+            } else if (args[0].equalsIgnoreCase("info")) {
+                return getDB().getCityList().stream().map(cityDetails -> ColorUtil.strip(cityDetails.getName())).toList();
             }
         }
 
